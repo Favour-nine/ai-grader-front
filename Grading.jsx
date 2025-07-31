@@ -16,7 +16,7 @@ export default function Grading() {
 
   const [rubricModalOpen, setRubricModalOpen] = useState(false);
   const [rubricName, setRubricName] = useState("");
-  const [criteria, setCriteria] = useState([{ description: "", score: "" }]);
+  const [criteria, setCriteria] = useState([{ description: "", minScore: "", maxScore: "" }]);
 
   useEffect(() => {
     fetch("http://localhost:5000/folders")
@@ -65,7 +65,7 @@ export default function Grading() {
     const data = await response.json();
     if (response.ok) {
       setRubricName("");
-      setCriteria([{ description: "", score: "" }]);
+      setCriteria([{ description: "", minScore: "", maxScore: "" }]);
       setRubricModalOpen(false);
       setRubrics((prev) => [...prev, `${rubricName}.json`]);
     } else {
@@ -80,7 +80,7 @@ export default function Grading() {
   };
 
   const addCriterion = () => {
-    setCriteria([...criteria, { description: "", score: "" }]);
+    setCriteria([...criteria, { description: "", minScore: "", maxScore: "" }]);
   };
 
   return (
@@ -203,12 +203,23 @@ export default function Grading() {
                     className="flex-1 border px-3 py-2 rounded text-sm"
                   />
                   <input
-                    value={item.score}
+                    value={item.minScore}
                     onChange={(e) =>
-                      handleCriterionChange(i, "score", e.target.value)
+                      handleCriterionChange(i, "minScore", e.target.value)
                     }
-                    placeholder="Score"
-                    className="w-24 border px-3 py-2 rounded text-sm"
+                    placeholder="Min"
+                    className="w-16 border px-2 py-2 rounded text-sm"
+                    type="number"
+                  />
+                  <span className="flex items-center text-gray-500">-</span>
+                  <input
+                    value={item.maxScore}
+                    onChange={(e) =>
+                      handleCriterionChange(i, "maxScore", e.target.value)
+                    }
+                    placeholder="Max"
+                    className="w-16 border px-2 py-2 rounded text-sm"
+                    type="number"
                   />
                 </div>
               ))}
